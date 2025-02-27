@@ -1,4 +1,4 @@
-# ECP5 Versa-5G Demo
+# ECP5 Versa Demo
 
 Run `make prog` to build & load, LEDs will count and
 a message will scroll on the 14-segment display.
