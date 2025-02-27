@@ -1,0 +1,1 @@
+This project is a learning project and the objective is the implementation of a RISC-V on the Lattice ECP5 Versa Development Kit.
