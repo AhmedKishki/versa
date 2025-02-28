@@ -1,7 +1,7 @@
 import sys
-# From http://www.plusea.at/downloads/print/AllMySegment-handout.pdf
-# and https://en.wikipedia.org/wiki/File:14_Segment_LCD_characters.jpg
-# N.B. segment labeling as documented in Versa Dev Board User Guide (schematic)
+
+# Font dictionary: Maps characters to active segments
+# Segment labels correspond to those in the Versa Dev Board schematic
 font = {
  "A": ['e', 'f', 'a', 'b', 'c', 'p', 'k'],
  "B": ['e', 'f', 'a', 'j', 'p', 'l', 'd'],
@@ -39,16 +39,30 @@ font = {
  "7": ['a', 'j', 'n'],
  "8": ['a', 'b', 'c', 'd', 'e', 'f', 'p', 'k'],
  "9": ['a', 'b', 'c', 'f', 'p', 'k'],
- " ": [],
- "\n": []
+ " ": [],  # Space (all segments off)
+ "\n": []  # Newline (ignored)
 }
+
+# Ordered segment names corresponding to FPGA segment layout
 seg_names = "abcdefghjklmnp"
+
+# Read input text from standard input
 text = sys.stdin.read()
+
+# Print Verilog local parameter for array size
 print("    localparam pat_len = {};".format(len(text)))
+
+# Declare Verilog array to hold display patterns
 print("    wire [13:0] display_pat[0:pat_len-1];")
+
+# Iterate through each character in the input text
 for i in range(len(text)):
-    segs = font[text[i]]
-    comment = "  // {}".format(text[i]) if segs else ""
+    segs = font[text[i]]  # Get segment list for the character
+    comment = "  // {}".format(text[i]) if segs else ""  # Add comment with the character
+
+    # Generate 14-bit binary representation (active-low: 0 = ON, 1 = OFF)
     bits = [(seg_names[k] in segs) for k in range(14)]
     bit_lit = "14'b" + "".join(reversed(["1" if b else "0" for b in bits]))
+
+    # Print Verilog assignment statement
     print("    assign display_pat[{}] = {};{}".format(i, bit_lit, comment))

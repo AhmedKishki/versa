@@ -1,3 +1,5 @@
+    // Each of the 14 bits in the binary pattern corresponds to a specific segment.
+    // Each segment can be turned ON or OFF by setting its corresponding bit in the 14-bit pattern.
     localparam pat_len = 52;
     wire [13:0] display_pat[0:pat_len-1];
     assign display_pat[0] = 14'b10001000110110;  // H
